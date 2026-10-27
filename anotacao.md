@@ -1,0 +1,1 @@
+adição de snprintf parou na familia 8 (n1 = 0x8)
