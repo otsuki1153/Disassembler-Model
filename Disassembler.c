@@ -41,36 +41,85 @@ int main(){
 
         switch (n1){
             case 0x0:
+                if(n2 == 0){
+                    if(n3 == 0xE){
+                        if(n4 == 0){
+                            strcpy(comando, "CLS");
+                        }else{
+                            strcpy(comando, "RET");
+                        }
+                    } else{
+                        strcpy(comando, "JMP");
+                    }
+                }
                 break;
             case 0x1:
+                strcpy(comando, "JMP");
                 break;
             case 0x2:
+                strcpy(comando, "CALL");
                 break;
             case 0x3:
+                strcpy(comando, "SKIP");
                 break;
             case 0x4:
+                strcpy(comando, "SKIP");
                 break;
             case 0x5:
+                strcpy(comando, "SKIP");
                 break;
             case 0x6:
+                strcpy(comando, "LD");
                 break;
             case 0x7:
+                strcpy(comando, "ADD");
                 break;
             case 0x8:
+                strcpy(comando, "LD");
                 break;
             case 0x9:
+                strcpy(comando, "SKIP");
                 break;
             case 0xA:
+                strcpy(comando, "LD");
                 break;
             case 0xB:
+                strcpy(comando, "JMP");
                 break;
             case 0xC:
+                strcpy(comando, "LD");
                 break;
             case 0xD:
+                strcpy(comando, "DRAW");
                 break;
             case 0xE:
+                strcpy(comando, "SKIP");
                 break;
             case 0xF:
+                if(n3 == 0){
+                    if(n4 == 7){
+                        strcpy(comando, "LD");
+                    } else if(n4 == 0xA){
+                        strcpy(comando, "WAIT");
+                    }
+                } else if (n3 == 1){
+                    if(n4 == 5){
+                        strcpy(comando, "TIMER");
+                    } else if(n4 == 8){
+                        strcpy(comando, "TIMER_S");
+                    } else{
+                        strcpy(comando, "ADD");
+                    }
+                } else if(n3 == 2){
+                    strcpy(comando, "LD");
+                } else if(n3 == 3){
+                    strcpy(comando, "WRITE");
+                } else if(n3 == 5){
+                    strcpy(comando, "WRITE");
+                } else if(n3 == 6){
+                    strcpy(comando, "READ");
+                }
+                
                 break;
             default:
                 strcpy(comando, "????");
@@ -78,7 +127,7 @@ int main(){
         }
         
         // printf("Lido: 0x%04X | Separado: [0x%02X] [0x%02X] | Juntado Correto: 0x%04X -> %X-%X-%X-%X : posicao: %03X\n", Fullbyte, high_byte, low_byte, opcode, n1, n2, n3, n4, posicao);
-        printf("\n 0x%04X : %04X -> %s", posicao, opcode, "comando");
+        printf("\n 0x%04X : %04X -> %s", posicao, opcode, comando);
         posicao += 2;
     }
     fclose(arquivo);
