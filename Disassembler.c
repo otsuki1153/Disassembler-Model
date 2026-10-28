@@ -40,7 +40,7 @@ int main(){
         uint8_t n3 = (low_byte >> 4)  & 0x0F;
         uint8_t n4 = low_byte & 0x0F;
 
-        uint16_t NNN;
+        uint16_t NNN = opcode & 0xFFF;
 
         switch (n1){
             case 0x0:
@@ -49,45 +49,42 @@ int main(){
                 } else if(n2 == 0x0 && n3 == 0xE && n4 == 0xE){
                     strcpy(comando, "RET");
                 } else{
-                    strcpy(comando, "SYS");
-                    NNN = opcode & 0xFFF;
-                    snprintf(comando, 50, "JP SYS, 0x%03X", NNN);
+                    // strcpy(comando, "SYS");
+                    snprintf(comando, 50, "SYS 0x%03X", NNN);
                 }
                 break;
             case 0x1:
                 // strcpy(comando, "JP");
-                NNN = opcode & 0xFFF;
-                snprintf(comando, 50, "JP, 0x%03X", NNN);
+                snprintf(comando, 50, "JP 0x%03X", NNN);
                 break;
             case 0x2:
                 // strcpy(comando, "CALL");
-                NNN = opcode & 0xFFF;
-                snprintf(comando, 50, "CALL, 0x%03X", NNN);
+                snprintf(comando, 50, "CALL 0x%03X", NNN);
                 break;
             case 0x3:
                 // strcpy(comando, "SE");
-                int pos = posicao;
-                if(n2 == low_byte){
-                    pos += 2;
-                }
-                snprintf(comando, 50, "SE V%X, 0x%02X, 0x%04X", n2, low_byte,pos);
+                // pos = posicao;
+                // if(n2 == low_byte){
+                //     pos += 2;
+                // }
+                snprintf(comando, 50, "SE V%X, 0x%02X", n2, low_byte);
                 break;
             case 0x4:
                 // strcpy(comando, "SNE");
-                int pos = posicao;
-                if(n2 != low_byte){
-                    pos += 2;
-                }
-                snprintf(comando, 50, "SNE V%X, 0x%02X, 0x%04X", n2, low_byte, pos);
+                // pos = posicao;
+                // if(n2 != low_byte){
+                //     pos += 2;
+                // }
+                snprintf(comando, 50, "SNE V%X, 0x%02X", n2, low_byte);
                 break;
             case 0x5:
                 if(n4 == 0x0){
                     // strcpy(comando, "SE");
-                    int pos = posicao;
-                    if(n2 == n3){
-                        pos += 2;
-                    }
-                    snprintf(comando, 50, "SE V%X V%X, 0x%04X",n2, n3, pos);
+                    // pos = posicao;
+                    // if(n2 == n3){
+                    //     pos += 2;
+                    // }
+                    snprintf(comando, 50, "SE V%X, V%X",n2, n3);
                 } else{
                     strcpy(comando, "????");
                 }
@@ -103,53 +100,71 @@ int main(){
             case 0x8:
                 if(n4 == 0x0){
                     // strcpy(comando, "LD");
-                    snprintf(comando, 50, "LD V%X, 0x%X", n3, n2);
+                    snprintf(comando, 50, "LD V%X, V%X", n2, n3);
                 } else if(n4 == 0x1){
-                    strcpy(comando, "OR");
+                    // strcpy(comando, "OR");
+                    snprintf(comando, 50, "OR V%X, V%X", n2, n3);
                 } else if(n4 == 0x2){
-                    strcpy(comando, "AND");
+                    // strcpy(comando, "AND");
+                    snprintf(comando, 50, "AND V%X, V%X", n2, n3);
                 } else if(n4 == 0x3){
-                    strcpy(comando, "XOR");
+                    // strcpy(comando, "XOR");
+                    snprintf(comando, 50, "XOR V%X, V%X", n2, n3);
                 } else if(n4 == 0x4){
-                    strcpy(comando, "ADD");
+                    // strcpy(comando, "ADD");
+                    snprintf(comando, 50, "ADD V%X, V%X", n2, n3);
                 } else if(n4 == 0x5){
-                    strcpy(comando, "SUB");
+                    // strcpy(comando, "SUB");
+                    snprintf(comando, 50, "SUB V%X, V%X", n2, n3);
                 } else if(n4 == 0x6){
-                    strcpy(comando, "SHR");
+                    // strcpy(comando, "SHR");
+                    snprintf(comando, 50, "SHR V%X, V%X", n2, n3);
                 } else if(n4 == 0x7){
-                    strcpy(comando, "SUBN");
+                    // strcpy(comando, "SUBN");
+                    snprintf(comando, 50, "SUBN V%X, V%X", n2, n3);
                 } else if(n4 == 0xE){
-                    strcpy(comando, "SHL");
+                    // strcpy(comando, "SHL");
+                    snprintf(comando, 50, "SHL V%X, V%X", n2, n3);
                 }else{
                     strcpy(comando, "????");
                 }
                 break;
             case 0x9:
                 if(n4 == 0x0){
-                    strcpy(comando, "SNE");
+                    // pos = posicao;
+                    // if(n2 != n3){
+                    //     pos += 2;
+                    // }
+                    // strcpy(comando, "SNE");
+                    snprintf(comando, 50, "SNE V%X, V%X", n2, n3);
                 } else{
                     strcpy(comando, "????");
                 }
                 break;
             case 0xA:
                 // strcpy(comando, "LD");
-                NNN = opcode & 0xFFF;
                 snprintf(comando, 50, "LD I, 0x%03X", NNN);
                 break;
             case 0xB:
-                strcpy(comando, "JP");
+                // strcpy(comando, "JP");
+                snprintf(comando, 50, "JP V0, 0x%03X",NNN);
                 break;
             case 0xC:
-                strcpy(comando, "LD");
+                // strcpy(comando, "LD");
+                snprintf(comando, 50, "RND V%X, 0x%02X", n2, low_byte);
                 break;
             case 0xD:
-                strcpy(comando, "DRW");
+                // strcpy(comando, "DRW");
+                snprintf(comando, 50, "DRW V%X,V%X,0x%X", n2,n3, n4);
                 break;
             case 0xE:
                 if(n3 == 0x9 && n4 == 0xE){
-                    strcpy(comando, "SKP");
+                    // strcpy(comando, "SKP");
+                    // pos = posicao;
+                    snprintf(comando, 50, "SKP V%X",n2);
                 } else if(n3 == 0xA && n4 == 0x1){
-                    strcpy(comando, "SKNP");
+                    // strcpy(comando, "SKNP");
+                    snprintf(comando, 50, "SKNP V%X",n2);
                 } else{
                     strcpy(comando, "????");
                 }
@@ -157,43 +172,52 @@ int main(){
             case 0xF:
                 if(n3 == 0x0){
                     if(n4 == 0x7){
-                        strcpy(comando, "LD Vx, DT");
+                        // strcpy(comando, "LD Vx, DT");
+                        snprintf(comando, 50, "LD V%X, DT",n2);
                     } else if(n4 == 0xA){
-                        strcpy(comando, "LD Vx, K");
+                        // strcpy(comando, "LD Vx, K");
+                        snprintf(comando, 50, "LD V%X, K",n2);
                     } else{
                         strcpy(comando, "????");
                     }
                 } else if (n3 == 0x1){
                     if(n4 == 0x5){
-                        strcpy(comando, "LD DT, Vx");
+                        // strcpy(comando, "LD DT, Vx");
+                        snprintf(comando, 50, "LD DT, V%X",n2);
                     } else if(n4 == 0x8){
-                        strcpy(comando, "LD ST, Vx");
+                        // strcpy(comando, "LD ST, Vx");
+                        snprintf(comando, 50, "LD ST, V%X",n2);
                     } else if(n4 == 0xE){
-                        strcpy(comando, "ADD I, Vx");
+                        // strcpy(comando, "ADD I, Vx");
+                        snprintf(comando, 50, "ADD I, V%X",n2);
                     } else{
                         strcpy(comando, "????");
                     }
                 } else if(n3 == 0x2){
                     if(n4 == 0x9){
-                        strcpy(comando, "LD F, Vx");
+                        // strcpy(comando, "LD F, Vx");
+                        snprintf(comando, 50, "LD F, V%X",n2);
                     } else{
                         strcpy(comando, "????");
                     }
                 } else if(n3 == 0x3){
                     if(n4 == 0x3){
-                        strcpy(comando, "LD B, Vx");
+                        // strcpy(comando, "LD B, Vx");
+                        snprintf(comando, 50, "LD B, V%X",n2);
                     } else{
                         strcpy(comando, "????");
                     }
                 } else if(n3 == 0x5){
                     if(n4 == 0x5){
-                        strcpy(comando, "LD [I], Vx");
+                        // strcpy(comando, "LD [I], Vx");
+                        snprintf(comando, 50, "LD [I], V%X",n2);
                     } else{
                         strcpy(comando, "????");
                     }
                 } else if(n3 == 0x6){
                     if(n4 == 0x5){
-                        strcpy(comando, "LD Vx, [I]");
+                        // strcpy(comando, "LD Vx, [I]");
+                        snprintf(comando, 50, "LD V%X, [I]",n2);
                     } else{
                         strcpy(comando, "????");
                     }
