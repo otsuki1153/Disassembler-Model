@@ -11,18 +11,80 @@ int main(){
     uint8_t low_byte;
     uint8_t bytes[2];
     uint16_t posicao = 0x200;
-    char * comando =  malloc(50 * sizeof(char));
+    char comando[20];
     size_t lidos;
+    
+    char rawFont[30];
+    int op = 10;
+
+    printf("Escolha o arquivo que quer desmontar:\n");
+    printf("1. chip8 Logo\n");
+    printf("2. IBM Logo\n");
+    printf("3. chorax+\n");
+    printf("4. flags\n");
+    printf("5. quirks\n");
+    printf("6. keypad\n");
+    printf("7. beep\n");
+    printf("8. scrolling\n\n\n");
+
+    printf("Digite sua opção: ");
+    scanf("%d", &op);
+
+    while(op < 0 || op > 8){
+        printf("Opção inválida! \n\n");
+        printf("Escolha o arquivo que quer desmontar:\n");
+        printf("1. chip8 Logo\n");
+        printf("2. IBM Logo\n");
+        printf("3. chorax+\n");
+        printf("4. flags\n");
+        printf("5. quirks\n");
+        printf("6. keypad\n");
+        printf("7. beep\n");
+        printf("8. scrolling\n\n\n");
+        printf("Digite sua opção: ");
+        scanf("%d", &op);
+    }
+    
+    switch(op){
+        case 1:
+            strcpy(rawFont, "chip8Raw/1-chip8-logo.ch8");
+            break;
+        case 2:
+            strcpy(rawFont, "chip8Raw/IBM Logo.ch8");
+            break;
+        case 3:
+            strcpy(rawFont, "chip8Raw/3-chorax+.ch8");
+            break;
+        case 4:
+            strcpy(rawFont, "chip8Raw/4-flags.ch8");
+            break;
+        case 5:
+            strcpy(rawFont, "chip8Raw/5-quirks.ch8");
+            break;
+        case 6:
+            strcpy(rawFont, "chip8Raw/6-keypad.ch8");
+            break;
+        case 7:
+            strcpy(rawFont, "chip8Raw/7-beep.ch8");
+            break;
+        case 8:
+            strcpy(rawFont, "chip8Raw/8-scrolling.ch8");
+            break;
+        
+        default:
+            break;
+    }
 
     if(comando == NULL){
         printf("Erro na alocação inicial!\n");
         return 1;
     }
-    arquivo = fopen("IBM Logo.ch8", "rb");
+
+
+    arquivo = fopen(rawFont, "rb");
 
     if(arquivo == NULL){
         printf("Erro no arquivo!!");
-        free(comando);
         return 1;
     } else{
         printf("concluido a leitura");
@@ -190,6 +252,5 @@ int main(){
         printf("sobrou um byte\n");
     }
     fclose(arquivo);
-    free(comando);
     return 0;
 }
